@@ -57,7 +57,7 @@ impl Dakoku {
         Ok(())
     }
 
-    pub fn down(&self, tab: &Arc<Tab>) -> Result<String, failure::Error> {
+    pub fn attendance(&self, tab: &Arc<Tab>) -> Result<String, failure::Error> {
         tab.wait_for_element_with_custom_timeout(
             "#kt-attendance-card-time-stamp > ul > li:nth-child(1) > form",
             Duration::from_secs(60),
@@ -69,7 +69,7 @@ impl Dakoku {
         Ok(format!("{} {}", date, time))
     }
 
-    pub fn up(&self, tab: &Arc<Tab>) -> Result<String, failure::Error> {
+    pub fn leaving(&self, tab: &Arc<Tab>) -> Result<String, failure::Error> {
         tab.wait_for_element_with_custom_timeout(
             "#kt-attendance-card-time-stamp > ul > li:nth-child(2) > form",
             Duration::from_secs(60),

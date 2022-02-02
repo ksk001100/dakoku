@@ -14,16 +14,16 @@ fn main() {
         .description(env!("CARGO_PKG_DESCRIPTION"))
         .usage(format!("{} [command] [flags]", env!("CARGO_PKG_NAME")))
         .version(env!("CARGO_PKG_VERSION"))
-        .command(down_command())
-        .command(up_command())
+        .command(attendance_command())
+        .command(leaving_command())
         .run(env::args().collect());
 }
 
-fn down_command() -> Command {
-    Command::new("down")
-        .alias("d")
-        .description("Reporting for work")
-        .usage(format!("{} down [flags]", env!("CARGO_PKG_NAME")))
+fn attendance_command() -> Command {
+    Command::new("attendance")
+        .alias("a")
+        .description("Attendance for work")
+        .usage(format!("{} attendance [flags]", env!("CARGO_PKG_NAME")))
         .flag(company_flag())
         .flag(account_flag())
         .flag(password_flag())
@@ -38,7 +38,7 @@ fn down_command() -> Command {
             let tab = browser.wait_for_initial_tab().unwrap();
 
             match dakoku.login(&tab) {
-                Ok(_) => match dakoku.down(&tab) {
+                Ok(_) => match dakoku.attendance(&tab) {
                     Ok(s) => println!("\rSuccess: {}", s),
                     Err(_) => println!("\rError..."),
                 },
@@ -49,11 +49,11 @@ fn down_command() -> Command {
         })
 }
 
-fn up_command() -> Command {
-    Command::new("up")
-        .alias("u")
+fn leaving_command() -> Command {
+    Command::new("leaving")
+        .alias("l")
         .description("Leaving work")
-        .usage(format!("{} up [flags]", env!("CARGO_PKG_NAME")))
+        .usage(format!("{} leaving [flags]", env!("CARGO_PKG_NAME")))
         .flag(company_flag())
         .flag(account_flag())
         .flag(password_flag())
@@ -68,7 +68,7 @@ fn up_command() -> Command {
             let tab = browser.wait_for_initial_tab().unwrap();
 
             match dakoku.login(&tab) {
-                Ok(_) => match dakoku.up(&tab) {
+                Ok(_) => match dakoku.leaving(&tab) {
                     Ok(s) => println!("\rSuccess: {}", s),
                     Err(_) => println!("\rError..."),
                 },
