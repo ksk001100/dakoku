@@ -64,26 +64,8 @@ impl Dakoku {
         )?
         .click()?;
 
-        let date = tab
-            .wait_for_element_with_custom_timeout(
-                "div.attendance-card-time-recorder-date",
-                Duration::from_secs(60),
-            )?
-            .get_description()?
-            .find(|n| n.node_name == "#text")
-            .unwrap()
-            .node_value
-            .to_owned();
-        let time = tab
-            .wait_for_element_with_custom_timeout(
-                "div.attendance-card-time-recorder-time",
-                Duration::from_secs(60),
-            )?
-            .get_description()?
-            .find(|n| n.node_name == "#text")
-            .unwrap()
-            .node_value
-            .to_owned();
+        let date = self.get_date(tab)?;
+        let time = self.get_time(tab)?;
         Ok(format!("{} {}", date, time))
     }
 
@@ -94,6 +76,12 @@ impl Dakoku {
         )?
         .click()?;
 
+        let date = self.get_date(tab)?;
+        let time = self.get_time(tab)?;
+        Ok(format!("{} {}", date, time))
+    }
+
+    fn get_date(&self, tab: &Arc<Tab>) -> Result<String, failure::Error> {
         let date = tab
             .wait_for_element_with_custom_timeout(
                 "div.attendance-card-time-recorder-date",
@@ -104,6 +92,11 @@ impl Dakoku {
             .unwrap()
             .node_value
             .to_owned();
+
+        Ok(date)
+    }
+
+    fn get_time(&self, tab: &Arc<Tab>) -> Result<String, failure::Error> {
         let time = tab
             .wait_for_element_with_custom_timeout(
                 "div.attendance-card-time-recorder-time",
@@ -114,6 +107,7 @@ impl Dakoku {
             .unwrap()
             .node_value
             .to_owned();
-        Ok(format!("{} {}", date, time))
+
+        Ok(time)
     }
 }
