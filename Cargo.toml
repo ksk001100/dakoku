@@ -3,7 +3,7 @@ name = "dakoku"
 version = "0.1.0"
 edition = "2021"
 authors = ["ksk001100 <hm.pudding0715@gmail.com>"]
-description = "My dakoku CLI"
+description = "Money Forward attendance CLI"
 
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -13,3 +13,4 @@ headless_chrome = "0.9"
 failure = "0.1.8"
 spinners = "2.0.0"
 seahorse = "1.1"
+dotenv = "0.15"

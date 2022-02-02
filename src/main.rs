@@ -1,13 +1,14 @@
 mod lib;
 
+use dotenv::dotenv;
 use headless_chrome::Browser;
 use lib::Dakoku;
 use seahorse::{App, Command, Context, Flag, FlagType};
 use spinners::{Spinner, Spinners};
-use std::{env, process};
+use std::env;
 
 fn main() {
-    let args = env::args().collect();
+    dotenv().ok();
     App::new(env!("CARGO_PKG_NAME"))
         .author(env!("CARGO_PKG_AUTHORS"))
         .description(env!("CARGO_PKG_DESCRIPTION"))
@@ -15,7 +16,7 @@ fn main() {
         .version(env!("CARGO_PKG_VERSION"))
         .command(down_command())
         .command(up_command())
-        .run(args);
+        .run(env::args().collect());
 }
 
 fn down_command() -> Command {
@@ -100,38 +101,20 @@ fn password_flag() -> Flag {
 fn get_company(c: &Context) -> String {
     match c.string_flag("company") {
         Ok(company) => company,
-        Err(_) => match env::var("DAKOKU_COMPANY") {
-            Ok(company) => company,
-            Err(_) => {
-                eprintln!("\rNot found enviroment variable \"DAKOKU_COMPANY\" nor command line argument \"--company.\"");
-                process::exit(1);
-            }
-        },
+        Err(_) => env!("DAKOKU_COMPANY").to_string(),
     }
 }
 
 fn get_account(c: &Context) -> String {
     match c.string_flag("account") {
         Ok(account) => account,
-        Err(_) => match env::var("DAKOKU_ACCOUNT") {
-            Ok(account) => account,
-            Err(_) => {
-                eprintln!("\rNot found enviroment variable \"DAKOKU_ACCOUNT\" nor command line argument \"--account\".");
-                process::exit(1);
-            }
-        },
+        Err(_) => env!("DAKOKU_ACCOUNT").to_string(),
     }
 }
 
 fn get_password(c: &Context) -> String {
     match c.string_flag("password") {
         Ok(pass) => pass,
-        Err(_) => match env::var("DAKOKU_PASSWORD") {
-            Ok(pass) => pass,
-            Err(_) => {
-                eprintln!("\rNot found enviroment variable \"DAKOKU_PASSWORD\" nor command line argument \"--password\".");
-                process::exit(1);
-            }
-        },
+        Err(_) => env!("DAKOKU_PASSWORD").to_string(),
     }
 }
