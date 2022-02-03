@@ -76,8 +76,6 @@ impl Dakoku {
             Duration::from_secs(5),
         )?;
 
-        thread::sleep(Duration::from_secs(2));
-
         Ok(())
     }
 
