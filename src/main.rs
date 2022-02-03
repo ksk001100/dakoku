@@ -1,7 +1,6 @@
 mod lib;
 
 use dotenv::dotenv;
-use headless_chrome::Browser;
 use lib::Dakoku;
 use seahorse::{App, Command, Context, Flag, FlagType};
 use spinners::{Spinner, Spinners};
@@ -23,7 +22,10 @@ fn attendance_command() -> Command {
     Command::new("attendance")
         .alias("a")
         .description("Attendance for work")
-        .usage(format!("{} attendance (or a) [flags]", env!("CARGO_PKG_NAME")))
+        .usage(format!(
+            "{} attendance (or a) [flags]",
+            env!("CARGO_PKG_NAME")
+        ))
         .flag(company_flag())
         .flag(account_flag())
         .flag(password_flag())
@@ -34,11 +36,9 @@ fn attendance_command() -> Command {
             let password = get_password(c);
 
             let dakoku = Dakoku::new(company, account, password);
-            let browser = Browser::default().unwrap();
-            let tab = browser.wait_for_initial_tab().unwrap();
 
-            match dakoku.login(&tab) {
-                Ok(_) => match dakoku.attendance(&tab) {
+            match dakoku.login() {
+                Ok(_) => match dakoku.attendance() {
                     Ok(s) => println!("\rSuccess: {}", s),
                     Err(_) => println!("\rError..."),
                 },
@@ -64,15 +64,13 @@ fn leaving_command() -> Command {
             let password = get_password(c);
 
             let dakoku = Dakoku::new(company, account, password);
-            let browser = Browser::default().unwrap();
-            let tab = browser.wait_for_initial_tab().unwrap();
 
-            match dakoku.login(&tab) {
-                Ok(_) => match dakoku.leaving(&tab) {
+            match dakoku.login() {
+                Ok(_) => match dakoku.leaving() {
                     Ok(s) => println!("\rSuccess: {}", s),
-                    Err(_) => println!("\rError..."),
+                    Err(e) => println!("\rError... {e}"),
                 },
-                Err(_) => eprintln!("\rError..."),
+                Err(e) => eprintln!("\rError... {e}"),
             }
 
             sp.stop()
