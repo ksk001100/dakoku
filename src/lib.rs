@@ -19,6 +19,7 @@ impl LoginInfo {
 
 pub struct Dakoku {
     login_info: LoginInfo,
+    #[allow(dead_code)]
     browser: Browser,
     tab: Arc<Tab>,
 }
