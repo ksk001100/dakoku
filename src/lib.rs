@@ -1,5 +1,5 @@
 use headless_chrome::{Browser, Tab};
-use std::{sync::Arc, thread, time::Duration};
+use std::{sync::Arc, time::Duration};
 
 pub struct LoginInfo {
     company: String,
