@@ -1,4 +1,4 @@
-use headless_chrome::{Browser, Tab};
+use headless_chrome::{Browser, Element, Tab};
 use std::{sync::Arc, time::Duration};
 
 pub struct LoginInfo {
@@ -40,52 +40,24 @@ impl Dakoku {
         let url = "https://attendance.moneyforward.com/employee_session/new";
         self.tab.navigate_to(url)?;
 
-        self.tab
-            .wait_for_element_with_custom_timeout(
-                "input#employee_session_form_office_account_name",
-                Duration::from_secs(60),
-            )?
-            .click()?;
+        self.click("input#employee_session_form_office_account_name")?;
         self.tab.type_str(&self.login_info.company)?;
 
-        self.tab
-            .wait_for_element_with_custom_timeout(
-                "input#employee_session_form_account_name_or_email",
-                Duration::from_secs(60),
-            )?
-            .click()?;
+        self.click("input#employee_session_form_account_name_or_email")?;
         self.tab.type_str(&self.login_info.account)?;
 
-        self.tab
-            .wait_for_element_with_custom_timeout(
-                "input#employee_session_form_password",
-                Duration::from_secs(60),
-            )?
-            .click()?;
+        self.click("input#employee_session_form_password")?;
         self.tab.type_str(&self.login_info.password)?;
 
-        self.tab
-            .wait_for_element_with_custom_timeout(
-                "input.attendance-button-email",
-                Duration::from_secs(60),
-            )?
-            .click()?;
+        self.click("input.attendance-button-email")?;
 
-        self.tab.wait_for_element_with_custom_timeout(
-            "h1.attendance-category-title",
-            Duration::from_secs(5),
-        )?;
+        self.select_element("h1.attendance-category-title")?;
 
         Ok(())
     }
 
     pub fn attendance(&self) -> Result<String, failure::Error> {
-        self.tab
-            .wait_for_element_with_custom_timeout(
-                "#kt-attendance-card-time-stamp > ul > li:nth-child(1) > form",
-                Duration::from_secs(60),
-            )?
-            .click()?;
+        self.click("#kt-attendance-card-time-stamp > ul > li:nth-child(1) > form")?;
 
         let date = self.get_date()?;
         let time = self.get_time()?;
@@ -93,12 +65,7 @@ impl Dakoku {
     }
 
     pub fn leaving(&self) -> Result<String, failure::Error> {
-        self.tab
-            .wait_for_element_with_custom_timeout(
-                "#kt-attendance-card-time-stamp > ul > li:nth-child(2) > form",
-                Duration::from_secs(60),
-            )?
-            .click()?;
+        self.click("#kt-attendance-card-time-stamp > ul > li:nth-child(2) > form")?;
 
         let date = self.get_date()?;
         let time = self.get_time()?;
@@ -107,11 +74,7 @@ impl Dakoku {
 
     fn get_date(&self) -> Result<String, failure::Error> {
         let date = self
-            .tab
-            .wait_for_element_with_custom_timeout(
-                "div.attendance-card-time-recorder-date",
-                Duration::from_secs(60),
-            )?
+            .select_element("div.attendance-card-time-recorder-date")?
             .get_description()?
             .find(|n| n.node_name == "#text")
             .unwrap()
@@ -123,11 +86,7 @@ impl Dakoku {
 
     fn get_time(&self) -> Result<String, failure::Error> {
         let time = self
-            .tab
-            .wait_for_element_with_custom_timeout(
-                "div.attendance-card-time-recorder-time",
-                Duration::from_secs(60),
-            )?
+            .select_element("div.attendance-card-time-recorder-time")?
             .get_description()?
             .find(|n| n.node_name == "#text")
             .unwrap()
@@ -135,5 +94,19 @@ impl Dakoku {
             .to_owned();
 
         Ok(time)
+    }
+
+    fn select_element(&self, selector: &str) -> Result<Element, failure::Error> {
+        let element = self
+            .tab
+            .wait_for_element_with_custom_timeout(selector, Duration::from_secs(60))?;
+
+        Ok(element)
+    }
+
+    fn click(&self, selector: &str) -> Result<(), failure::Error> {
+        self.select_element(selector)?.click()?;
+
+        Ok(())
     }
 }
