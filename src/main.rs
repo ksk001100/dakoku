@@ -4,7 +4,7 @@ use dotenv::dotenv;
 use lib::Dakoku;
 use seahorse::{App, Command, Context, Flag, FlagType};
 use spinners::{Spinner, Spinners};
-use std::env;
+use std::{env, process};
 
 fn main() {
     dotenv().ok();
@@ -67,8 +67,20 @@ fn leaving_command() -> Command {
 
             match dakoku.login() {
                 Ok(_) => match dakoku.leaving() {
-                    Ok(s) => println!("\rSuccess: {}", s),
-                    Err(e) => println!("\rError... {e}"),
+                    Ok(s) => {
+                        let msg = format!("Success: {}", &s);
+                        println!("\r{}", &msg);
+                        if cfg!(target_os = "linux") {
+                            send_notify(&msg);
+                        }
+                    }
+                    Err(e) => {
+                        let msg = format!("Error... {}", &e);
+                        println!("\r{}", &msg);
+                        if cfg!(target_os = "linux") {
+                            send_notify(&msg);
+                        }
+                    }
                 },
                 Err(e) => eprintln!("\rError... {e}"),
             }
@@ -115,4 +127,16 @@ fn get_password(c: &Context) -> String {
         Ok(pass) => pass,
         Err(_) => env!("DAKOKU_PASSWORD").to_string(),
     }
+}
+
+fn send_notify(s: &str) {
+    process::Command::new("notify-send")
+        .arg("-i")
+        .arg("mf")
+        .arg(s)
+        .stdout(process::Stdio::null())
+        .spawn()
+        .unwrap()
+        .wait()
+        .unwrap();
 }
