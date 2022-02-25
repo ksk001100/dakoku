@@ -12,8 +12,6 @@ $ cargo install --path .
 ```
 
 ## Usage
-Launch Google Chrome and then run it.
-
 ```shell
 $ dakoku --help
 $ dakoku attendance
