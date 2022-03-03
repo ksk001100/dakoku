@@ -46,7 +46,7 @@ fn attendance_command() -> Command {
                         Notification::new()
                             .summary("Dakoku")
                             .body(&msg)
-                            .icon("mf")
+                            .auto_icon()
                             .show()
                             .unwrap();
                     }
@@ -56,7 +56,7 @@ fn attendance_command() -> Command {
                         Notification::new()
                             .summary("Dakoku")
                             .body(&msg)
-                            .icon("mf")
+                            .auto_icon()
                             .show()
                             .unwrap();
                     }
@@ -67,7 +67,7 @@ fn attendance_command() -> Command {
                     Notification::new()
                         .summary("Dakoku")
                         .body(&msg)
-                        .icon("mf")
+                        .auto_icon()
                         .show()
                         .unwrap();
                 }
@@ -101,7 +101,7 @@ fn leaving_command() -> Command {
                         Notification::new()
                             .summary("Dakoku")
                             .body(&msg)
-                            .icon("mf")
+                            .auto_icon()
                             .show()
                             .unwrap();
                     }
@@ -111,7 +111,7 @@ fn leaving_command() -> Command {
                         Notification::new()
                             .summary("Dakoku")
                             .body(&msg)
-                            .icon("mf")
+                            .auto_icon()
                             .show()
                             .unwrap();
                     }
@@ -122,7 +122,7 @@ fn leaving_command() -> Command {
                     Notification::new()
                         .summary("Dakoku")
                         .body(&msg)
-                        .icon("mf")
+                        .auto_icon()
                         .show()
                         .unwrap();
                 }
