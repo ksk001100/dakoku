@@ -2,9 +2,10 @@ mod lib;
 
 use dotenv::dotenv;
 use lib::Dakoku;
+use notify_rust::Notification;
 use seahorse::{App, Command, Context, Flag, FlagType};
 use spinners::{Spinner, Spinners};
-use std::{env, process};
+use std::env;
 
 fn main() {
     dotenv().ok();
@@ -39,10 +40,37 @@ fn attendance_command() -> Command {
 
             match dakoku.login() {
                 Ok(_) => match dakoku.attendance() {
-                    Ok(s) => println!("\rSuccess: {}", s),
-                    Err(_) => println!("\rError..."),
+                    Ok(s) => {
+                        let msg = format!("Success attendance: {}", &s);
+                        println!("\r{}", &msg);
+                        Notification::new()
+                            .summary("Dakoku")
+                            .body(&msg)
+                            .icon("mf")
+                            .show()
+                            .unwrap();
+                    }
+                    Err(e) => {
+                        let msg = format!("Error... {}", &e);
+                        println!("\r{}", &msg);
+                        Notification::new()
+                            .summary("Dakoku")
+                            .body(&msg)
+                            .icon("mf")
+                            .show()
+                            .unwrap();
+                    }
                 },
-                Err(_) => eprintln!("\rError..."),
+                Err(e) => {
+                    let msg = format!("Error... {}", &e);
+                    println!("\r{}", &msg);
+                    Notification::new()
+                        .summary("Dakoku")
+                        .body(&msg)
+                        .icon("mf")
+                        .show()
+                        .unwrap();
+                }
             }
 
             sp.stop()
@@ -68,21 +96,36 @@ fn leaving_command() -> Command {
             match dakoku.login() {
                 Ok(_) => match dakoku.leaving() {
                     Ok(s) => {
-                        let msg = format!("Success: {}", &s);
+                        let msg = format!("Success leaving: {}", &s);
                         println!("\r{}", &msg);
-                        if cfg!(target_os = "linux") {
-                            send_notify(&msg);
-                        }
+                        Notification::new()
+                            .summary("Dakoku")
+                            .body(&msg)
+                            .icon("mf")
+                            .show()
+                            .unwrap();
                     }
                     Err(e) => {
                         let msg = format!("Error... {}", &e);
                         println!("\r{}", &msg);
-                        if cfg!(target_os = "linux") {
-                            send_notify(&msg);
-                        }
+                        Notification::new()
+                            .summary("Dakoku")
+                            .body(&msg)
+                            .icon("mf")
+                            .show()
+                            .unwrap();
                     }
                 },
-                Err(e) => eprintln!("\rError... {e}"),
+                Err(e) => {
+                    let msg = format!("Error... {}", &e);
+                    println!("\r{}", &msg);
+                    Notification::new()
+                        .summary("Dakoku")
+                        .body(&msg)
+                        .icon("mf")
+                        .show()
+                        .unwrap();
+                }
             }
 
             sp.stop()
@@ -127,16 +170,4 @@ fn get_password(c: &Context) -> String {
         Ok(pass) => pass,
         Err(_) => env!("DAKOKU_PASSWORD").to_string(),
     }
-}
-
-fn send_notify(s: &str) {
-    process::Command::new("notify-send")
-        .arg("-i")
-        .arg("mf")
-        .arg(s)
-        .stdout(process::Stdio::null())
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
 }
