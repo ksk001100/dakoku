@@ -38,42 +38,23 @@ fn attendance_command() -> Command {
 
             let dakoku = Dakoku::new(company, account, password);
 
-            match dakoku.login() {
+            let msg = match dakoku.login() {
                 Ok(_) => match dakoku.attendance() {
-                    Ok(s) => {
-                        let msg = format!("Success attendance: {}", &s);
-                        println!("\r{}", &msg);
-                        Notification::new()
-                            .summary("Dakoku")
-                            .body(&msg)
-                            .auto_icon()
-                            .show()
-                            .unwrap();
-                    }
-                    Err(e) => {
-                        let msg = format!("Error... {}", &e);
-                        println!("\r{}", &msg);
-                        Notification::new()
-                            .summary("Dakoku")
-                            .body(&msg)
-                            .auto_icon()
-                            .show()
-                            .unwrap();
-                    }
+                    Ok(s) => format!("Success attendance: {}", &s),
+                    Err(e) => format!("Error... {}", &e),
                 },
-                Err(e) => {
-                    let msg = format!("Error... {}", &e);
-                    println!("\r{}", &msg);
-                    Notification::new()
-                        .summary("Dakoku")
-                        .body(&msg)
-                        .auto_icon()
-                        .show()
-                        .unwrap();
-                }
-            }
+                Err(e) => format!("Error... {}", &e),
+            };
 
-            sp.stop()
+            sp.stop();
+
+            println!("\r{}", &msg);
+            Notification::new()
+                .summary("Dakoku")
+                .body(&msg)
+                .auto_icon()
+                .show()
+                .unwrap();
         })
 }
 
@@ -93,42 +74,23 @@ fn leaving_command() -> Command {
 
             let dakoku = Dakoku::new(company, account, password);
 
-            match dakoku.login() {
+            let msg = match dakoku.login() {
                 Ok(_) => match dakoku.leaving() {
-                    Ok(s) => {
-                        let msg = format!("Success leaving: {}", &s);
-                        println!("\r{}", &msg);
-                        Notification::new()
-                            .summary("Dakoku")
-                            .body(&msg)
-                            .auto_icon()
-                            .show()
-                            .unwrap();
-                    }
-                    Err(e) => {
-                        let msg = format!("Error... {}", &e);
-                        println!("\r{}", &msg);
-                        Notification::new()
-                            .summary("Dakoku")
-                            .body(&msg)
-                            .auto_icon()
-                            .show()
-                            .unwrap();
-                    }
+                    Ok(s) => format!("Success leaving: {}", &s),
+                    Err(e) => format!("Error... {}", &e),
                 },
-                Err(e) => {
-                    let msg = format!("Error... {}", &e);
-                    println!("\r{}", &msg);
-                    Notification::new()
-                        .summary("Dakoku")
-                        .body(&msg)
-                        .auto_icon()
-                        .show()
-                        .unwrap();
-                }
-            }
+                Err(e) => format!("Error... {}", &e),
+            };
 
-            sp.stop()
+            sp.stop();
+
+            println!("\r{}", &msg);
+            Notification::new()
+                .summary("Dakoku")
+                .body(&msg)
+                .auto_icon()
+                .show()
+                .unwrap();
         })
 }
 
