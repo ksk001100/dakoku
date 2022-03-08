@@ -47,13 +47,16 @@ fn attendance_command() -> Command {
 
             sp.stop();
 
-            println!("\r{}", &msg);
-            Notification::new()
+            let notify = Notification::new()
                 .summary("Dakoku")
                 .body(&msg)
                 .auto_icon()
-                .show()
-                .unwrap();
+                .show();
+
+            match notify {
+                Ok(_) => {}
+                Err(_) => println!("\r{}", &msg),
+            }
         })
 }
 
@@ -83,13 +86,16 @@ fn leaving_command() -> Command {
 
             sp.stop();
 
-            println!("\r{}", &msg);
-            Notification::new()
+            let notify = Notification::new()
                 .summary("Dakoku")
                 .body(&msg)
                 .auto_icon()
-                .show()
-                .unwrap();
+                .show();
+
+            match notify {
+                Ok(_) => {}
+                Err(_) => println!("\r{}", &msg),
+            }
         })
 }
 
