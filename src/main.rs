@@ -1,6 +1,6 @@
 mod lib;
 
-use dotenv::dotenv;
+use dotenv_codegen::dotenv;
 use lib::Dakoku;
 use notify_rust::Notification;
 use seahorse::{App, Command, Context, Flag, FlagType};
@@ -8,7 +8,6 @@ use spinners::{Spinner, Spinners};
 use std::env;
 
 fn main() {
-    dotenv().ok();
     App::new(env!("CARGO_PKG_NAME"))
         .author(env!("CARGO_PKG_AUTHORS"))
         .description(env!("CARGO_PKG_DESCRIPTION"))
@@ -116,20 +115,20 @@ fn password_flag() -> Flag {
 fn get_company(c: &Context) -> String {
     match c.string_flag("company") {
         Ok(company) => company,
-        Err(_) => env!("DAKOKU_COMPANY").to_string(),
+        Err(_) => dotenv!("DAKOKU_COMPANY").to_string(),
     }
 }
 
 fn get_account(c: &Context) -> String {
     match c.string_flag("account") {
         Ok(account) => account,
-        Err(_) => env!("DAKOKU_ACCOUNT").to_string(),
+        Err(_) => dotenv!("DAKOKU_ACCOUNT").to_string(),
     }
 }
 
 fn get_password(c: &Context) -> String {
     match c.string_flag("password") {
         Ok(pass) => pass,
-        Err(_) => env!("DAKOKU_PASSWORD").to_string(),
+        Err(_) => dotenv!("DAKOKU_PASSWORD").to_string(),
     }
 }
