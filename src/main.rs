@@ -53,9 +53,8 @@ fn attendance_command() -> Command {
                 .auto_icon()
                 .show();
 
-            match notify {
-                Ok(_) => {}
-                Err(_) => println!("\r{}", &msg),
+            if notify.is_err() {
+                println!("\r{}", &msg);
             }
         })
 }
@@ -92,9 +91,8 @@ fn leaving_command() -> Command {
                 .auto_icon()
                 .show();
 
-            match notify {
-                Ok(_) => {}
-                Err(_) => println!("\r{}", &msg),
+            if notify.is_err() {
+                println!("\r{}", &msg);
             }
         })
 }
