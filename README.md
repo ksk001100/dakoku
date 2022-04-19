@@ -6,9 +6,9 @@ Money Forward attendance CLI
 ```shell
 $ git clone https://github.com/ksk001100/dakoku
 $ cd dakoku
-$ cp .env.example .env
-$ vim .env # Edit environment variables
 $ cargo install --path .
+$ cp .env.example ~/.dakoku
+$ vim ~/.dakoku # Edit environment variables
 ```
 
 ## Usage
