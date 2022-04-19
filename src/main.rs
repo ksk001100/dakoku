@@ -1,11 +1,11 @@
 mod lib;
 
+use dotenv;
 use lib::Dakoku;
 use notify_rust::Notification;
 use seahorse::{App, Command, Context, Flag, FlagType};
 use spinners::{Spinner, Spinners};
 use std::env;
-use dotenv;
 
 fn main() {
     dotenv::from_filename("~/.dakoku").ok();
