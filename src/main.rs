@@ -1,14 +1,15 @@
 mod lib;
 
-use dotenv;
 use lib::Dakoku;
 use notify_rust::Notification;
 use seahorse::{App, Command, Context, Flag, FlagType};
 use spinners::{Spinner, Spinners};
-use std::env;
+use std::{env, path::PathBuf};
 
 fn main() {
-    dotenv::from_filename("~/.dakoku").ok();
+    let mut env_path: PathBuf = dirs::home_dir().unwrap();
+    env_path.push(".dakoku");
+    dotenv::from_filename(env_path).ok();
 
     App::new(env!("CARGO_PKG_NAME"))
         .author(env!("CARGO_PKG_AUTHORS"))
