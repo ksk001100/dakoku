@@ -1,10 +1,12 @@
 mod lib;
 
 use lib::Dakoku;
-use notify_rust::Notification;
 use seahorse::{App, Command, Context, Flag, FlagType};
 use spinners::{Spinner, Spinners};
 use std::{env, path::PathBuf};
+
+#[cfg(target_os = "linux")]
+use notify_rust::Notification;
 
 fn main() {
     let mut env_path: PathBuf = dirs::home_dir().unwrap();
