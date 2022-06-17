@@ -1,3 +1,4 @@
+use chrono::{Datelike, Local};
 use headless_chrome::{Browser, Element, Tab};
 use std::{sync::Arc, time::Duration};
 
@@ -57,6 +58,7 @@ impl Dakoku {
     }
 
     pub fn attendance(&self) -> Result<String, failure::Error> {
+        self.click("body > div.attendance-contents > header > nav > ul > li.current > a")?;
         self.click("#kt-attendance-card-time-stamp > ul > li:nth-child(1) > form")?;
 
         let date = self.get_date()?;
@@ -65,6 +67,7 @@ impl Dakoku {
     }
 
     pub fn leaving(&self) -> Result<String, failure::Error> {
+        self.click("body > div.attendance-contents > header > nav > ul > li.current > a")?;
         self.click("#kt-attendance-card-time-stamp > ul > li:nth-child(2) > form")?;
 
         let date = self.get_date()?;
@@ -72,28 +75,38 @@ impl Dakoku {
         Ok(format!("{} {}", date, time))
     }
 
+    pub fn is_holiday(&self) -> Result<bool, failure::Error> {
+        self.click("#kt-attendance-header-navigation-item-attendances > a")?;
+        let day = Local::now().day();
+
+        let selector = &format!("body > div.attendance-contents > div.attendance-contents-inner > div > div > div > div.attendance-main-contents-inner > div.attendance-scrollable-tables-wrapper > table > tbody > tr:nth-child({}) > td.column-classification", day);
+        let pattern = self.get_element_value(selector)?;
+
+        Ok(pattern.contains("休日"))
+    }
+
     fn get_date(&self) -> Result<String, failure::Error> {
-        let date = self
-            .select_element("div.attendance-card-time-recorder-date")?
-            .get_description()?
-            .find(|n| n.node_name == "#text")
-            .unwrap()
-            .node_value
-            .to_owned();
+        let date = self.get_element_value("div.attendance-card-time-recorder-date")?;
 
         Ok(date)
     }
 
     fn get_time(&self) -> Result<String, failure::Error> {
-        let time = self
-            .select_element("div.attendance-card-time-recorder-time")?
+        let time = self.get_element_value("div.attendance-card-time-recorder-time")?;
+
+        Ok(time)
+    }
+
+    fn get_element_value(&self, selector: &str) -> Result<String, failure::Error> {
+        let value = self
+            .select_element(selector)?
             .get_description()?
             .find(|n| n.node_name == "#text")
             .unwrap()
             .node_value
             .to_owned();
 
-        Ok(time)
+        Ok(value)
     }
 
     fn select_element(&self, selector: &str) -> Result<Element, failure::Error> {

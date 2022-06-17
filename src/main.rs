@@ -41,9 +41,18 @@ fn attendance_command() -> Command {
             let dakoku = Dakoku::new(company, account, password);
 
             let msg = match dakoku.login() {
-                Ok(_) => match dakoku.attendance() {
-                    Ok(s) => format!("Success attendance: {}", &s),
-                    Err(e) => format!("Error... {}", &e),
+                Ok(_) => match dakoku.is_holiday() {
+                    Ok(is_holiday) => {
+                        if is_holiday {
+                            format!("Today is a holiday")
+                        } else {
+                            match dakoku.attendance() {
+                                Ok(s) => format!("Success attendance: {}", &s),
+                                Err(e) => format!("Error... {}", &e),
+                            }
+                        }
+                    }
+                    Err(_) => format!("Error..."),
                 },
                 Err(e) => format!("Error... {}", &e),
             };
@@ -79,9 +88,18 @@ fn leaving_command() -> Command {
             let dakoku = Dakoku::new(company, account, password);
 
             let msg = match dakoku.login() {
-                Ok(_) => match dakoku.leaving() {
-                    Ok(s) => format!("Success leaving: {}", &s),
-                    Err(e) => format!("Error... {}", &e),
+                Ok(_) => match dakoku.is_holiday() {
+                    Ok(is_holiday) => {
+                        if is_holiday {
+                            format!("Today is a holiday")
+                        } else {
+                            match dakoku.leaving() {
+                                Ok(s) => format!("Success leaving: {}", &s),
+                                Err(e) => format!("Error... {}", &e),
+                            }
+                        }
+                    }
+                    Err(_) => format!("Error..."),
                 },
                 Err(e) => format!("Error... {}", &e),
             };

@@ -1,6 +1,6 @@
 [package]
 name = "dakoku"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 authors = ["ksk001100 <hm.pudding0715@gmail.com>"]
 description = "Money Forward attendance CLI"
@@ -16,3 +16,4 @@ seahorse = "2.0"
 dotenv = "0.15"
 notify-rust = "4"
 dirs = "4"
+chrono = "0.4"
