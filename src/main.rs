@@ -59,15 +59,7 @@ fn attendance_command() -> Command {
 
             sp.stop();
 
-            let notify = Notification::new()
-                .summary("Dakoku")
-                .body(&msg)
-                .auto_icon()
-                .show();
-
-            if notify.is_err() {
-                println!("\r{}", &msg);
-            }
+            notify(msg);
         })
 }
 
@@ -106,15 +98,7 @@ fn leaving_command() -> Command {
 
             sp.stop();
 
-            let notify = Notification::new()
-                .summary("Dakoku")
-                .body(&msg)
-                .auto_icon()
-                .show();
-
-            if notify.is_err() {
-                println!("\r{}", &msg);
-            }
+            notify(msg);
         })
 }
 
@@ -156,4 +140,22 @@ fn get_password(c: &Context) -> String {
         Ok(pass) => pass,
         Err(_) => env::var("DAKOKU_PASSWORD").unwrap(),
     }
+}
+
+#[cfg(target_os = "linux")]
+fn notify(msg: String) {
+    let notify = Notification::new()
+        .summary("Dakoku")
+        .body(&msg)
+        .auto_icon()
+        .show();
+
+    if notify.is_err() {
+        println!("\r{}", &msg);
+    }
+}
+
+#[cfg(not(target_os = "linux"))]
+fn notify(msg: String) {
+    println!("\r{}", &msg);
 }
