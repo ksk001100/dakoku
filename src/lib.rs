@@ -58,7 +58,7 @@ impl Dakoku {
     }
 
     pub fn attendance(&self) -> Result<String, failure::Error> {
-        self.click("body > div.attendance-contents > header > nav > ul > li.current > a")?;
+        self.click("body > div.attendance-contents > header > nav > ul > li:nth-child(1) > a")?;
         self.click("#kt-attendance-card-time-stamp > ul > li:nth-child(1) > form")?;
 
         let date = self.get_date()?;
@@ -67,7 +67,7 @@ impl Dakoku {
     }
 
     pub fn leaving(&self) -> Result<String, failure::Error> {
-        self.click("body > div.attendance-contents > header > nav > ul > li.current > a")?;
+        self.click("body > div.attendance-contents > header > nav > ul > li:nth-child(1) > a")?;
         self.click("#kt-attendance-card-time-stamp > ul > li:nth-child(2) > form")?;
 
         let date = self.get_date()?;
