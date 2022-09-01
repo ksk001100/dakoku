@@ -80,7 +80,7 @@ impl Dakoku {
         let day = Local::now().day();
 
         let selector = &format!("body > div.attendance-contents > div.attendance-contents-inner > div > div > div > div > section > section > div.daily-attendances-table > div.att-pc.tw-p-16.tw-pt-0 > section > section > section > section > div:nth-child({}) > div:nth-child(5) > p", day);
-        let pattern = self.get_element_value(selector)?; 
+        let pattern = self.get_element_value(selector)?;
 
         Ok(pattern.contains("休日"))
     }
