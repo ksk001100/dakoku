@@ -1,6 +1,6 @@
 [package]
 name = "dakoku"
-version = "0.2.2"
+version = "0.2.3"
 edition = "2021"
 authors = ["ksk001100 <hm.pudding0715@gmail.com>"]
 description = "Money Forward attendance CLI"
