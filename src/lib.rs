@@ -79,8 +79,8 @@ impl Dakoku {
         self.click("#kt-attendance-header-navigation-item-attendances > a")?;
         let day = Local::now().day();
 
-        let selector = &format!("body > div.attendance-contents > div.attendance-contents-inner > div > div > div > div.attendance-main-contents-inner > div.attendance-scrollable-tables-wrapper > table > tbody > tr:nth-child({}) > td.column-classification", day);
-        let pattern = self.get_element_value(selector)?;
+        let selector = &format!("body > div.attendance-contents > div.attendance-contents-inner > div > div > div > div > section > section > div.daily-attendances-table > div.att-pc.tw-p-16.tw-pt-0 > section > section > section > section > div:nth-child({}) > div:nth-child(5) > p", day);
+        let pattern = self.get_element_value(selector)?; 
 
         Ok(pattern.contains("休日"))
     }
