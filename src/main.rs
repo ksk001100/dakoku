@@ -1,6 +1,6 @@
-mod lib;
+mod dakoku;
 
-use lib::Dakoku;
+use dakoku::Dakoku;
 use seahorse::{App, Command, Context, Flag, FlagType};
 use spinners::{Spinner, Spinners};
 use std::{env, path::PathBuf};
@@ -39,24 +39,14 @@ fn attendance_command() -> Command {
             let company = get_company(c);
             let account = get_account(c);
             let password = get_password(c);
-
             let dakoku = Dakoku::new(company, account, password);
 
             let msg = match dakoku.login() {
-                Ok(_) => match dakoku.is_holiday() {
-                    Ok(is_holiday) => {
-                        if is_holiday {
-                            format!("Today is a holiday")
-                        } else {
-                            match dakoku.attendance() {
-                                Ok(s) => format!("Success attendance: {}", &s),
-                                Err(e) => format!("Error... {}", &e),
-                            }
-                        }
-                    }
-                    Err(_) => format!("Error..."),
+                Ok(_) => match dakoku.attendance() {
+                    Ok(s) => format!("Success attendance: {}", &s),
+                    Err(e) => format!("Error... {}", &e),
                 },
-                Err(e) => format!("Error... {}", &e),
+                Err(_) => format!("Error..."),
             };
 
             sp.stop();
@@ -78,22 +68,12 @@ fn leaving_command() -> Command {
             let company = get_company(c);
             let account = get_account(c);
             let password = get_password(c);
-
             let dakoku = Dakoku::new(company, account, password);
 
             let msg = match dakoku.login() {
-                Ok(_) => match dakoku.is_holiday() {
-                    Ok(is_holiday) => {
-                        if is_holiday {
-                            format!("Today is a holiday")
-                        } else {
-                            match dakoku.leaving() {
-                                Ok(s) => format!("Success leaving: {}", &s),
-                                Err(e) => format!("Error... {}", &e),
-                            }
-                        }
-                    }
-                    Err(_) => format!("Error..."),
+                Ok(_) => match dakoku.leaving() {
+                    Ok(s) => format!("Success leaving: {}", &s),
+                    Err(e) => format!("Error... {}", &e),
                 },
                 Err(e) => format!("Error... {}", &e),
             };
